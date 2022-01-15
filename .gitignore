@@ -1,0 +1,6 @@
+/.sonarqube
+/.vscode
+/.vs
+/bin
+/obj
+/publish
