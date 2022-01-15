@@ -29,6 +29,8 @@ namespace PriorityChatV3
             "",
             "Actual changes:",
             "",
+            "v3.0.0: Slight code optimization",
+            "v3.0.0: Migrated to .NET 6",
             "v3.0.0: Slight code improvements/optimizations for .NET 5",
             "v3.0.0: Added Username Color",
             "v3.0.0: Added Emote Manager",

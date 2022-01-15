@@ -3,8 +3,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Net;
 using System.Net.Http;
+using System.Text;
 
 namespace PriorityChatV3
 {
@@ -33,7 +33,6 @@ namespace PriorityChatV3
                 Arguments = "/c \"" + filePath + " " + GenerateDownloaderArgs() + "\"",
                 UseShellExecute = false
             };
-            MessageBox.Show(p.StartInfo.Arguments);
             p.EnableRaisingEvents = true;
             p.Exited += P_Exited;
             p.Start();
@@ -43,7 +42,6 @@ namespace PriorityChatV3
             DialogResult result = MessageBox.Show(fileName + " not found.\nDo you want to download it now?", fileName + " not found", MessageBoxButtons.YesNo);
             if (result == DialogResult.Yes)
             {
-                using var client = new WebClient();
                 string url = await GetDownloadURL();
                 if (url is null)
                 {
@@ -51,12 +49,19 @@ namespace PriorityChatV3
                     return false;
                 }
                 MessageBox.Show(url);
-                using WebClient wc = new();
-                wc.DownloadProgressChanged += Wc_DownloadProgressChanged;
-                downloadProgress.Show();
-                await wc.DownloadFileTaskAsync(new Uri(url), filePath);
-                downloadProgress.Hide();
+                using (var client = new HttpClientDownloadWithProgress(url, filePath))
+                {
+                    client.ProgressChanged += (totalFileSize, totalBytesDownloaded, progressPercentage) =>
+                    {
+                        downloadProgress.SetProgress((int)progressPercentage);
+                    };
+                    downloadProgress.Show();
+                    await client.StartDownload();
+                    downloadProgress.Hide();
+                }
+
                 return true;
+
             }
             else
                 return false;
@@ -92,17 +97,15 @@ namespace PriorityChatV3
             else
                 MessageBox.Show("Error while downloading emotes.\nError code: " + exitCode);
         }
-        private void Wc_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
-        {
-            downloadProgress.SetProgress(e.ProgressPercentage);
-        }
         private void FormEmotes_Load(object sender, EventArgs e)
         {
             comboBox1.SelectedIndex = 0;
+            StringBuilder sb = new();
             foreach (string emote in EmoteManager.GetEmotes())
             {
-                textBox6.Text += emote + Environment.NewLine;
+                sb.Append(emote + Environment.NewLine);
             }
+            textBox1.Text = sb.ToString();
         }
         private void Button3_Click(object sender, EventArgs e)
         {
