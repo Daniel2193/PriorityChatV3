@@ -247,6 +247,7 @@ namespace PriorityChatV3
             if(e.KeyCode == Keys.E && e.Control)
             {
                 e.SuppressKeyPress = true;
+                
             }
         }
         private void FormChat_FormClosing(object sender, FormClosingEventArgs e)
