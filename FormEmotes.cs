@@ -59,9 +59,7 @@ namespace PriorityChatV3
                     await client.StartDownload();
                     downloadProgress.Hide();
                 }
-
                 return true;
-
             }
             else
                 return false;

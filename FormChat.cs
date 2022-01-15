@@ -18,7 +18,7 @@ namespace PriorityChatV3
             public IPEndPoint EndPoint;
             public UdpClient UdpClient;
         }
-        public const string version = "2.6.0";
+        public const string version = "3.0.1";
         private readonly string[] changelog =
         {
             "Upcoming/Planned Features:",
@@ -29,6 +29,7 @@ namespace PriorityChatV3
             "",
             "Actual changes:",
             "",
+            "v3.0.1: Fixed version string",
             "v3.0.0: Slight code optimization",
             "v3.0.0: Migrated to .NET 6",
             "v3.0.0: Slight code improvements/optimizations for .NET 5",
